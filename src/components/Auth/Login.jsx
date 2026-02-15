@@ -4,49 +4,54 @@ const Login = () => {
 
   const [email, setemail] = useState("")
   const [password, setpassword] = useState("")
+  const [message, setMessage] = useState("")  
+
   const submitHandler = (e) => {
-    e.preventDefault();
-    console.log("email is ", email);
-    console.log("password is ", password);
+    e.preventDefault()
+    console.log(email, password)
+    setMessage("Login Successful ✅")
     setemail("")
     setpassword("")
   }
 
   return (
-    <div className='flex h-screen w-screen items-center justify-center bg-black'>
-      <div className='border-2 border-emerald-600 p-20 rounded-lg w-96'>
-        <form onSubmit={(e) => {
-          submitHandler(e);
-        }}
-          className='flex flex-col items-center justify-center'>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-emerald-900">
+
+      <div className="backdrop-blur-lg bg-white/10 border border-white/20 shadow-2xl rounded-2xl p-10 w-96">
+
+        <h2 className="text-3xl font-bold text-white text-center mb-6">
+          Login to Your Account
+        </h2>
+
+        <form onSubmit={submitHandler} className="flex flex-col gap-4">
+
           <input
             value={email}
-            onChange={(e) => {
-              setemail(e.target.value)
-            }}
+            onChange={(e) => setemail(e.target.value)}
             required
-            type="text"
+            type="email"
             placeholder="Enter your Email"
-            className="border-2 border-emerald-600 p-2 mb-4 w-full rounded-full bg-transparent text-white placeholder-white"
+            className="w-full p-3 rounded-lg bg-transparent border border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
           />
+
           <input
             value={password}
-
-            onChange={(e) => {
-              setpassword(e.target.value)
-
-            }}
+            onChange={(e) => setpassword(e.target.value)}
             required
             type="password"
-            placeholder="Enter your password"
-            className="border-2 border-emerald-600 p-2 mb-4 w-full rounded-full bg-transparent text-white placeholder-white"
+            placeholder="Enter your Password"
+            className="w-full p-3 rounded-lg bg-transparent border border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
           />
+
           <button
-            type='submit'
-            className='bg-emerald-600 text-white px-4 py-2 rounded'>
+            type="submit"
+            className="mt-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-lg transition duration-300"
+          >
             Login
           </button>
+          {message && <p className="text-green-500 text-center mt-4">{message}</p>}
         </form>
+
       </div>
     </div>
   )
