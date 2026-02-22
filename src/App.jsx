@@ -1,49 +1,51 @@
-import React, { useContext, useEffect, useState } from 'react'
-import Login from './components/Auth/Login'
-import { getLocalStorage, setLocalStorage } from './utils/LocalStorage'
-import EmployeeDashboard from './components/Dashboard/EmployeeDashboard'
-import AdminDashboard from './components/Dashboard/AdminDashboard'
-import { AuthContext } from './context/AuthProvider.jsx' 
-
-
-
+import React, { useContext, useEffect, useState } from "react";
+import Login from "./components/Auth/Login";
+import EmployeeDashboard from "./components/Dashboard/EmployeeDashboard";
+import AdminDashboard from "./components/Dashboard/AdminDashboard";
+import { getLocalStorage, setLocalStorage } from "./utils/LocalStorage";
+import { AuthContext } from "./context/AuthProvider";
 
 const App = () => {
-
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
+  const { employees, admin } = useContext(AuthContext);
 
   const handleLogin = (email, password) => {
-    if (email === "admin@me.com" && password === "admin123") {
+    // Admin Login
+    const adminUser = admin?.find(
+      (a) => a.email === email && a.password === password
+    );
+
+    if (adminUser) {
       setUser("admin");
-      
-
-    } else if (email === "employee@me.com" && password === "employee123") {
-      setUser("employee");
-      
-
-    } else {
-      alert("Invalid Credentials");
+      return;
     }
-  }
+
+    // Employee Login
+    const employeeUser = employees?.find(
+      (e) => e.email === email && e.password === password
+    );
+
+    if (employeeUser) {
+      setUser("employee");
+      return;
+    }
+
+    alert("Invalid Credentials");
+  };
 
   useEffect(() => {
     if (!localStorage.getItem("employees")) {
       setLocalStorage();
     }
-
-    const data = getLocalStorage();
-    console.log(data);
   }, []);
-  
-  const Data= useContext(AuthContext)
-  console.log(Data) 
 
   return (
     <>
       {!user && <Login handleLogin={handleLogin} />}
-      {user == 'admin' ? <AdminDashboard /> : <EmployeeDashboard />}
+      {user === "admin" && <AdminDashboard />}
+      {user === "employee" && <EmployeeDashboard />}
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;

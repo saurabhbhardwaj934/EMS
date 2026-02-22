@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 
 const Login = (props) => {
-  
+
 
   const [email, setemail] = useState("")
   const [password, setpassword] = useState("")
-  const [message, setMessage] = useState("")  
+  const [message, setMessage] = useState("")
 
   const submitHandler = (e) => {
     e.preventDefault()
-    props.handleLogin(email, password)  
+    props.handleLogin(email, password)
     console.log(email, password)
     setMessage("Login Successful ✅")
     setemail("")
