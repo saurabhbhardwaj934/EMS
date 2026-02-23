@@ -2,42 +2,51 @@ import React, { useContext, useEffect, useState } from "react";
 import Login from "./components/Auth/Login";
 import EmployeeDashboard from "./components/Dashboard/EmployeeDashboard";
 import AdminDashboard from "./components/Dashboard/AdminDashboard";
-import { getLocalStorage, setLocalStorage } from "./utils/LocalStorage";
 import { AuthContext } from "./context/AuthProvider";
 
 const App = () => {
   const [user, setUser] = useState(null);
   const { employees, admin } = useContext(AuthContext);
 
+  // Check already logged user
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+
+    if (loggedInUser) {
+      const parsedUser = JSON.parse(loggedInUser);
+      setUser(parsedUser.role);
+    }
+  }, []);
+
   const handleLogin = (email, password) => {
-    // Admin Login
-    const adminUser = admin?.find(
+    const adminUser = admin.find(
       (a) => a.email === email && a.password === password
     );
 
     if (adminUser) {
+      localStorage.setItem(
+        "loggedInUser",
+        JSON.stringify({ role: "admin" })
+      );
       setUser("admin");
       return;
     }
 
-    // Employee Login
-    const employeeUser = employees?.find(
+    const employeeUser = employees.find(
       (e) => e.email === email && e.password === password
     );
 
     if (employeeUser) {
+      localStorage.setItem(
+        "loggedInUser",
+        JSON.stringify({ role: "employee" })
+      );
       setUser("employee");
       return;
     }
 
-    alert("Invalid Credentials");
+    alert("Login details galat hai");
   };
-
-  useEffect(() => {
-    if (!localStorage.getItem("employees")) {
-      setLocalStorage();
-    }
-  }, []);
 
   return (
     <>
